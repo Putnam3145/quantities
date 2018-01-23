@@ -71,10 +71,10 @@ unittest
     }
     do
     {
-        immutable epsilon = 6.3 * liter / milli(mole) / centi(meter);
-        immutable totalVolume = 285 * micro(liter);
-        immutable sampleVolume = 25 * micro(liter);
-        immutable lightPath = 0.6 * centi(meter);
+        immutable epsilon = 6.3 * liter / (milli * mole) / (centi * meter);
+        immutable totalVolume = 285 * micro * liter;
+        immutable sampleVolume = 25 * micro * liter;
+        immutable lightPath = 0.6 * centi * meter;
         return deltaAbs / deltaTime / (epsilon * lightPath) * totalVolume / sampleVolume;
     }
 
@@ -86,10 +86,10 @@ pure unittest
 {
     static auto catc(Dimensionless deltaAbs, Time deltaTime = 1 * minute)
     {
-        enum epsilon = 6.3 * liter / milli(mole) / centi(meter);
-        enum totalVolume = 285 * micro(liter);
-        enum sampleVolume = 25 * micro(liter);
-        enum lightPath = 0.6 * centi(meter);
+        enum epsilon = 6.3 * liter / (milli * mole) / (centi * meter);
+        enum totalVolume = 285 * micro * liter;
+        enum sampleVolume = 25 * micro * liter;
+        enum lightPath = 0.6 * centi * meter;
         return deltaAbs / deltaTime / (epsilon * lightPath) * totalVolume / sampleVolume;
     }
 
@@ -108,7 +108,7 @@ unittest
 @("siFormat RT")
 unittest
 {
-    QVariant!double speed = 12.5 * kilo(meter) / hour;
+    QVariant!double speed = 12.5 * kilo * meter / hour;
 
     assert(siFormat("%.2f m/s", speed) == "3.47 m/s");
     assert(siFormat("%.2f m/s"w, speed) == "3.47 m/s"w);

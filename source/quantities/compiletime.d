@@ -31,10 +31,10 @@ unittest
         alias MolarMass = typeof(kilogram / mole);
 
         // I have to make a new solution at the concentration of 5 mmol/L
-        concentration = 5.0 * milli(mole) / liter;
+        concentration = 5.0 * milli * mole / liter;
 
         // The final volume is 100 ml.
-        volume = 100.0 * milli(liter);
+        volume = 100.0 * milli * liter;
 
         // The molar mass of my compound is 118.9 g/mol
         MolarMass mm = 118.9 * gram / mole;
@@ -48,7 +48,7 @@ unittest
 
     // Working with predefined units
     {
-        auto distance = 384_400 * kilo(meter); // From Earth to Moon
+        auto distance = 384_400 * kilo * meter; // From Earth to Moon
         auto speed = 299_792_458 * meter / second; // Speed of light
         auto time = distance / speed;
         assert(time.siFormat!"%.3f s" == "1.282 s");
@@ -63,7 +63,7 @@ unittest
 
     // Calculations can be done at compile-time
     {
-        enum distance = 384_400 * kilo(meter); // From Earth to Moon
+        enum distance = 384_400 * kilo * meter; // From Earth to Moon
         enum speed = 299_792_458 * meter / second; // Speed of light
         enum time = distance / speed;
         /* static */
@@ -73,7 +73,7 @@ unittest
 
     // Create a new unit from the predefined ones
     {
-        auto inch = 2.54 * centi(meter);
+        auto inch = 2.54 * centi * meter;
         auto mile = 1609 * meter;
         assert(mile.value(inch).approxEqual(63_346)); // inches in a mile
         // NB. Cannot use siFormatter, because inches are not SI units
@@ -106,7 +106,6 @@ unittest
 }
 
 import quantities.internal.dimensions;
-import quantities.common;
 import quantities.runtime;
 import std.format;
 import std.math;

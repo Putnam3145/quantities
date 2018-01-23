@@ -20,7 +20,6 @@ module quantities;
 
 public import quantities.compiletime;
 public import quantities.runtime;
-public import quantities.common;
 public import quantities.parsing;
 public import quantities.si;
 
@@ -32,7 +31,7 @@ unittest
     import quantities.si;
 
     // Define a quantity from SI units
-    auto distance = 384_400 * kilo(meter);
+    auto distance = 384_400 * kilo * meter;
 
     // Define a quantity from a string
     auto speed = si!"299_792_458 m/s";
@@ -44,6 +43,7 @@ unittest
     {
         return d / s;
     }
+
     Time time = calculateTime(distance, speed);
 
     // Dimensions are checked at compile time for consistency
@@ -62,7 +62,7 @@ unittest
     import std.exception : assertThrown;
 
     // Define a quantity from SI units (using the helper function `qVariant`)
-    auto distance = qVariant(384_400 * kilo(meter));
+    auto distance = qVariant(384_400 * kilo * meter);
 
     // Define a quantity from a string
     auto speed = parseSI("299_792_458 m/s");
@@ -72,6 +72,7 @@ unittest
     {
         return d / s;
     }
+
     auto time = calculateTime(distance, speed);
 
     // Dimensions are checked at run time for consistency

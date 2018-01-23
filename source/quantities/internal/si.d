@@ -17,7 +17,7 @@ Generates SI units, prefixes and several utility functions
 mixin template SIDefinitions(N)
 {
     import quantities.compiletime : Quantity, isQuantity, unit, square, cubic;
-    import quantities.runtime : QVariant, isQVariantOrQuantity, prefix;
+    import quantities.runtime : QVariant, isQVariantOrQuantity;
     import quantities.parsing : SymbolList, Parser;
     import std.conv : parse;
     import std.math : PI;
@@ -78,26 +78,26 @@ mixin template SIDefinitions(N)
     enum dalton = 1.66053886e-27 * kilogram; /// ditto
 
     /// SI prefixes.
-    alias yotta = prefix!1e24;
-    alias zetta = prefix!1e21; /// ditto
-    alias exa = prefix!1e18; /// ditto
-    alias peta = prefix!1e15; /// ditto
-    alias tera = prefix!1e12; /// ditto
-    alias giga = prefix!1e9; /// ditto
-    alias mega = prefix!1e6; /// ditto
-    alias kilo = prefix!1e3; /// ditto
-    alias hecto = prefix!1e2; /// ditto
-    alias deca = prefix!1e1; /// ditto
-    alias deci = prefix!1e-1; /// ditto
-    alias centi = prefix!1e-2; /// ditto
-    alias milli = prefix!1e-3; /// ditto
-    alias micro = prefix!1e-6; /// ditto
-    alias nano = prefix!1e-9; /// ditto
-    alias pico = prefix!1e-12; /// ditto
-    alias femto = prefix!1e-15; /// ditto
-    alias atto = prefix!1e-18; /// ditto
-    alias zepto = prefix!1e-21; /// ditto
-    alias yocto = prefix!1e-24; /// ditto
+    enum yotta = 1e24;
+    enum zetta = 1e21; /// ditto
+    enum exa = 1e18; /// ditto
+    enum peta = 1e15; /// ditto
+    enum tera = 1e12; /// ditto
+    enum giga = 1e9; /// ditto
+    enum mega = 1e6; /// ditto
+    enum kilo = 1e3; /// ditto
+    enum hecto = 1e2; /// ditto
+    enum deca = 1e1; /// ditto
+    enum deci = 1e-1; /// ditto
+    enum centi = 1e-2; /// ditto
+    enum milli = 1e-3; /// ditto
+    enum micro = 1e-6; /// ditto
+    enum nano = 1e-9; /// ditto
+    enum pico = 1e-12; /// ditto
+    enum femto = 1e-15; /// ditto
+    enum atto = 1e-18; /// ditto
+    enum zepto = 1e-21; /// ditto
+    enum yocto = 1e-24; /// ditto
 
     /// Predefined quantity type templates for SI quantities
     alias Dimensionless = typeof(one);
@@ -188,26 +188,26 @@ mixin template SIDefinitions(N)
         .addUnit("t", ton)
         .addUnit("eV", electronVolt)
         .addUnit("Da", dalton)
-        .addPrefix("Y", 1e24)
-        .addPrefix("Z", 1e21)
-        .addPrefix("E", 1e18)
-        .addPrefix("P", 1e15)
-        .addPrefix("T", 1e12)
-        .addPrefix("G", 1e9)
-        .addPrefix("M", 1e6)
-        .addPrefix("k", 1e3)
-        .addPrefix("h", 1e2)
-        .addPrefix("da", 1e1)
-        .addPrefix("d", 1e-1)
-        .addPrefix("c", 1e-2)
-        .addPrefix("m", 1e-3)
-        .addPrefix("µ", 1e-6)
-        .addPrefix("n", 1e-9)
-        .addPrefix("p", 1e-12)
-        .addPrefix("f", 1e-15)
-        .addPrefix("a", 1e-18)
-        .addPrefix("z", 1e-21)
-        .addPrefix("y", 1e-24);
+        .addPrefix("Y", yotta)
+        .addPrefix("Z", zetta)
+        .addPrefix("E", exa)
+        .addPrefix("P", peta)
+        .addPrefix("T", tera)
+        .addPrefix("G", giga)
+        .addPrefix("M", mega)
+        .addPrefix("k", kilo)
+        .addPrefix("h", hecto)
+        .addPrefix("da", deca)
+        .addPrefix("d", deci)
+        .addPrefix("c", centi)
+        .addPrefix("m", milli)
+        .addPrefix("µ", micro)
+        .addPrefix("n", nano)
+        .addPrefix("p", pico)
+        .addPrefix("f", femto)
+        .addPrefix("a", atto)
+        .addPrefix("z", zepto)
+        .addPrefix("y", yocto);
     // dfmt on
 
     /// A list of common SI symbols and prefixes
@@ -363,7 +363,7 @@ mixin template SIDefinitions(N)
     ///
     unittest
     {
-        QVariant!double speed = 12.5 * kilo(meter) / hour;
+        QVariant!double speed = 12.5 * kilo * meter / hour;
         assert("%.2f m/s".siFormat(speed) == "3.47 m/s");
     }
 
@@ -384,7 +384,7 @@ mixin template SIDefinitions(N)
     ///
     unittest
     {
-        enum speed = 12.5 * kilo(meter) / hour;
+        enum speed = 12.5 * kilo * meter / hour;
         assert(siFormat!"%.2f m/s"(speed) == "3.47 m/s");
     }
 }

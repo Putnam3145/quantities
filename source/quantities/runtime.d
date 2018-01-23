@@ -26,10 +26,10 @@ unittest
     // Introductory example
     {
         // I have to make a new solution at the concentration of 5 mmol/L
-        QVariant!double concentration = 5.0 * milli(mole) / liter;
+        QVariant!double concentration = 5.0 * milli * mole / liter;
 
         // The final volume is 100 ml.
-        QVariant!double volume = 100.0 * milli(liter);
+        QVariant!double volume = 100.0 * milli * liter;
 
         // The molar mass of my compound is 118.9 g/mol
         QVariant!double molarMass = 118.9 * gram / mole;
@@ -43,7 +43,7 @@ unittest
 
     // Working with predefined units
     {
-        QVariant!double distance = 384_400 * kilo(meter); // From Earth to Moon
+        QVariant!double distance = 384_400 * kilo * meter; // From Earth to Moon
         QVariant!double speed = 299_792_458 * meter / second; // Speed of light
         QVariant!double time = distance / speed;
         assert(time.siFormat!"%.3f s" == "1.282 s");
@@ -60,7 +60,7 @@ unittest
 
     // Create a new unit from the predefined ones
     {
-        QVariant!double inch = 2.54 * centi(meter);
+        QVariant!double inch = 2.54 * centi * meter;
         QVariant!double mile = 1609 * meter;
         assert(mile.value(inch).approxEqual(63_346)); // inches in a mile
         // NB. Cannot use siFormatter, because inches are not SI units
@@ -86,7 +86,6 @@ unittest
 }
 
 import quantities.internal.dimensions;
-import quantities.common;
 import quantities.compiletime;
 
 import std.conv;

@@ -14,10 +14,10 @@ unittest
     auto movie = unit!int("Movie");
 
     // Let there be prefixes
-    alias few = prefix!2;
-    alias many = prefix!100;
+    enum int few = 2;
+    enum int many = 100;
 
-    auto tolerated = few(cookie) / movie;
+    auto tolerated = few * cookie / movie;
     auto toxic = 50 * tolerated;
 
     // 100 cookies is really too much for one movie
@@ -31,7 +31,7 @@ unittest
 
     // Let there be a parser
     auto symbols = SymbolList!int().addUnit("🍎", apple).addUnit("🍪",
-            cookie).addUnit("🎬", movie).addPrefix("🙂", 2).addPrefix("😃", 100);
+            cookie).addUnit("🎬", movie).addPrefix("🙂", few).addPrefix("😃", many);
     auto parser = Parser!int(symbols);
 
     // Use parsed quantities
