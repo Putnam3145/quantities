@@ -223,31 +223,6 @@ mixin template SIDefinitions(N)
     }
 
     /++
-    Parses a statically-typed Quantity from a string at run time.
-
-    Throws a DimensionException if the parsed quantity doesn't have the same
-    dimensions as Q.
-
-    Params:
-        Q = the type of the returned quantity.
-        str = the string to parse.
-    +/
-    Q parseSI(Q, S)(S str)
-            if (isQuantity!Q && isSomeString!S)
-    {
-        return Q(siParser.parse(str));
-    }
-    ///
-    unittest
-    {
-        alias Time = typeof(second);
-        Time t = parseSI!Time("90 min");
-        assert(t == 90 * minute);
-        t = parseSI!Time("h");
-        assert(t == 1 * hour);
-    }
-
-    /++
     Creates a Quantity from a string at compile-time.
     +/
     template si(string str)

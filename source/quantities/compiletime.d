@@ -100,8 +100,8 @@ unittest
     // Run-time parsing of statically typed Quantities
     {
         auto data = ["distance-to-the-moon" : "384_400 km", "speed-of-light" : "299_792_458 m/s"];
-        auto distance = parseSI!Length(data["distance-to-the-moon"]);
-        auto speed = parseSI!Speed(data["speed-of-light"]);
+        Length distance = parseSI(data["distance-to-the-moon"]);
+        Speed speed = parseSI(data["speed-of-light"]);
     }
 }
 
