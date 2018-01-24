@@ -141,12 +141,12 @@ private:
     void ensureSameDim(const Dimensions d)() const
     {
         static assert(dimensions == d,
-                "Dimension error: %s is not consistent with %s".format(dimensions, d));
+                format!"Dimension error: %s is not consistent with %s"(dimensions, d));
     }
 
     void ensureEmpty(const Dimensions d)() const
     {
-        static assert(d.empty, "Dimension error: %s instead of no dimensions".format(d));
+        static assert(d.empty, format!"Dimension error: %s instead of no dimensions"(d));
     }
 
 package(quantities):
@@ -178,8 +178,8 @@ public:
     {
         import std.exception;
 
-        enforce(dimensions == qty.dimensions,
-                new DimensionException("Incompatible dimensions", dimensions, qty.dimensions));
+        enforce(dimensions == qty.dimensions, new DimensionException(
+                format!"Dimension error: %s is not consistent with %s"(dimensions, qty.dimensions)));
         _value = qty.rawValue;
     }
 
@@ -226,8 +226,9 @@ public:
     {
         import std.exception;
 
-        enforce(dimensions == target.dimensions,
-                new DimensionException("Incompatible dimensions", dimensions, target.dimensions));
+        enforce(dimensions == target.dimensions, new DimensionException(
+                format!"Dimension error: %s is not consistent with %s"(dimensions,
+                target.dimensions)));
         return _value / target.rawValue;
     }
 
@@ -284,8 +285,8 @@ public:
     {
         import std.exception;
 
-        enforce(dimensions == qty.dimensions,
-                new DimensionException("Incompatible dimensions", dimensions, qty.dimensions));
+        enforce(dimensions == qty.dimensions, new DimensionException(
+                format!"Dimension error: %s is not consistent with %s"(dimensions, qty.dimensions)));
         _value = qty.rawValue;
         return this;
     }

@@ -100,20 +100,7 @@ Exception thrown when operating on two units that are not interconvertible.
 +/
 class DimensionException : Exception
 {
-    /// Holds the dimensions of the quantity currently operated on
-    Dimensions thisDim;
-    /// Holds the dimensions of the eventual other operand
-    Dimensions otherDim;
-
     mixin basicExceptionCtors;
-
-    this(string msg, Dimensions thisDim, Dimensions otherDim,
-            string file = __FILE__, size_t line = __LINE__, Throwable next = null) @safe pure nothrow
-    {
-        super(msg, file, line, next);
-        this.thisDim = thisDim;
-        this.otherDim = otherDim;
-    }
 }
 ///
 unittest
@@ -145,13 +132,14 @@ private:
     void checkDim(Dimensions dim) @safe pure const
     {
         enforce(_dimensions == dim,
-                new DimensionException("Incompatible dimensions", _dimensions, dim));
+                new DimensionException(format!"Dimension error: %s is not consistent with %s"(_dimensions,
+                    dim)));
     }
 
     void checkDimensionless() @safe pure const
     {
-        enforce(_dimensions.empty, new DimensionException("Not dimensionless",
-                _dimensions, Dimensions.init));
+        enforce(_dimensions.empty,
+                new DimensionException(format!"Dimension error: %s instead of no dimensions"(_dimensions)));
     }
 
 package(quantities):

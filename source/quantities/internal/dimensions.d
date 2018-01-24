@@ -169,14 +169,17 @@ public:
         return num / cast(T) den;
     }
 
-    void toString(scope void delegate(const(char)[]) sink) const
+    string toString() @safe pure nothrow const
     {
-        sink.formattedWrite!"%d"(num);
-        if (den != 1)
+        try
         {
-            sink("/");
-            sink.formattedWrite!"%d"(den);
+            if (den == 1)
+                return format!"%d"(num);
+            else
+                return format!"%d/%d"(num, den);
         }
+        catch (Exception e)
+            assert(false, "Error in Rational.toString");
     }
 }
 
@@ -238,19 +241,18 @@ struct Dim
         }
     }
 
-    ///
-    void toString(scope void delegate(const(char)[]) sink) const
+    string toString() @safe pure nothrow const
     {
-        if (power == 0)
-            return;
-        if (power == 1)
-            sink(symbol);
-        else
+        try
         {
-            sink.formattedWrite!"%s"(symbol);
-            sink("^");
-            sink.formattedWrite!"%s"(power);
+            if (power == 0)
+                return null;
+            if (power == 1)
+                return symbol;
+            return format!"%s^%s"(symbol, power);
         }
+        catch (Exception e)
+            assert(false, "Error in Dim.toString");
     }
 }
 
@@ -417,9 +419,12 @@ public:
         return powinverse(Rational(n));
     }
 
-    void toString(scope void delegate(const(char)[]) sink) const
+    string toString() @safe pure nothrow const
     {
-        sink.formattedWrite!"[%(%s %)]"(_dims);
+        try
+            return format!"[%(%s %)]"(_dims);
+        catch (Exception e)
+            assert(false, "Error in Dimensions.toString");
     }
 }
 

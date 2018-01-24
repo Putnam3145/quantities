@@ -9,24 +9,6 @@ enum meter = unit!double("L");
 enum second = unit!double("T");
 enum radian = unit!double(null);
 
-void checkIncompatibleDimensions(E)(lazy E expression, QVariant!double lhs, QVariant!double rhs)
-{
-    auto e = collectException!DimensionException(expression());
-    assert(e, "No DimensionException was thrown");
-    assert(e.thisDim == lhs.dimensions);
-    assert(e.otherDim == rhs.dimensions);
-    assert(e.msg == "Incompatible dimensions");
-}
-
-void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
-{
-    auto e = collectException!DimensionException(expression());
-    assert(e, "No DimensionException was thrown");
-    assert(e.thisDim == operand.dimensions);
-    assert(e.otherDim == Dimensions.init);
-    assert(e.msg == "Not dimensionless");
-}
-
 @("this()")
 @safe pure nothrow unittest
 {
@@ -67,7 +49,7 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
 @safe pure unittest
 {
     auto value = cast(double) radian;
-    checkNotDimensionless(cast(double) meter, meter);
+    assertThrown!DimensionException(cast(double) meter);
 }
 
 @("opAssign Q")
@@ -114,8 +96,8 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     assert(plus.value(meter) == 2);
     auto minus = meter - meter;
     assert(minus.value(meter) == 0);
-    checkIncompatibleDimensions(meter + second, meter, second);
-    checkIncompatibleDimensions(meter - second, meter, second);
+    assertThrown!DimensionException(meter + second);
+    assertThrown!DimensionException(meter - second);
 }
 
 @("opBinary Q+N N+Q Q-N N-Q")
@@ -131,10 +113,10 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     auto a4 = 10 - radian;
     assert(a4.value(radian).approxEqual(9));
 
-    checkNotDimensionless(meter + 1, meter);
-    checkNotDimensionless(meter - 1, meter);
-    checkNotDimensionless(1 + meter, meter);
-    checkNotDimensionless(1 - meter, meter);
+    assertThrown!DimensionException(meter + 1);
+    assertThrown!DimensionException(meter - 1);
+    assertThrown!DimensionException(1 + meter);
+    assertThrown!DimensionException(1 - meter);
 }
 
 @("opBinary Q*N, N*Q, Q/N, N/Q, Q%N, N%Q")
@@ -170,7 +152,7 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     assert(surfaceMod10.value(meter * meter).approxEqual(0));
     assert(surfaceMod10.dimensions == surface.dimensions);
 
-    checkIncompatibleDimensions(meter % second, meter, second);
+    assertThrown!DimensionException(meter % second);
 }
 
 @("opBinary Q^^I Q^^R")
@@ -208,7 +190,7 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     angle %= 2;
     assert(angle.value(radian).approxEqual(1));
 
-    checkNotDimensionless(time %= 3, time);
+    assertThrown!DimensionException(time %= 3);
 }
 
 @("opOpAssign Q*=Q Q/=Q Q%=Q")
@@ -234,8 +216,8 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     assert(minute == 60 * second);
     assert(radian == 1);
 
-    checkIncompatibleDimensions(meter == second, meter, second);
-    checkNotDimensionless(meter == 1, meter);
+    assertThrown!DimensionException(meter == second);
+    assertThrown!DimensionException(meter == 1);
 }
 
 @("opCmp Q<Q")
@@ -248,7 +230,7 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     assert(hour > minute);
     assert(hour >= hour);
 
-    checkIncompatibleDimensions(meter < second, meter, second);
+    assertThrown!DimensionException(meter < second);
 }
 
 @("opCmp Q<N")
@@ -260,7 +242,7 @@ void checkNotDimensionless(E)(lazy E expression, QVariant!double operand)
     assert(angle > 1);
     assert(angle >= 2);
 
-    checkNotDimensionless(meter < 1, meter);
+    assertThrown!DimensionException(meter < 1);
 }
 
 @("toString")
