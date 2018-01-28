@@ -412,7 +412,7 @@ public:
         static if (isIntegral!N)
             auto newValue = std.math.pow(_value, cast(real) power).roundTo!N;
         else static if (isFloatingPoint!N)
-            auto newValue = std.math.pow(_value, cast(real) power);
+            auto newValue = std.math.pow(_value, cast(N) power);
         else
             static assert(false, "Operation not defined for " ~ QVariant!N.stringof);
         return QVariant(newValue, _dimensions.pow(power));

@@ -27,6 +27,7 @@ private:
     invariant()
     {
         assert(den != 0);
+        assert(isNormalized);
     }
 
     void normalize() @safe pure nothrow
@@ -64,9 +65,10 @@ public:
         normalize();
     }
 
-    bool isInt() @property @safe pure nothrow const
+    T opCast(T)() @safe pure nothrow const 
+    if (isNumeric!T)
     {
-        return den == 1;
+        return cast(T) num / cast(T) den;
     }
 
     Rational inverted() @property @safe pure nothrow const
@@ -74,7 +76,6 @@ public:
         Rational result;
         result.num = den;
         result.den = num;
-        assert(isNormalized);
         return result;
     }
 
@@ -82,23 +83,16 @@ public:
             if (op == "+" || op == "-" || op == "*" || op == "/")
     {
         mixin("this = this" ~ op ~ "other;");
-        assert(isNormalized);
     }
 
     void opOpAssign(string op)(int value) @safe pure nothrow 
             if (op == "+" || op == "-" || op == "*" || op == "/")
     {
         mixin("this = this" ~ op ~ "value;");
-        assert(isNormalized);
     }
 
     Rational opUnary(string op)() @safe pure nothrow const 
             if (op == "+" || op == "-")
-    out (result)
-    {
-        assert(result.isNormalized);
-    }
-    body
     {
         return Rational(mixin(op ~ "num"), den);
     }
@@ -129,11 +123,6 @@ public:
 
     Rational opBinary(string op)(int value) @safe pure nothrow const 
             if (op == "+" || op == "-" || op == "*" || op == "/")
-    out
-    {
-        assert(isNormalized);
-    }
-    body
     {
         return mixin("this" ~ op ~ "Rational(value)");
     }
@@ -161,12 +150,6 @@ public:
     int opCmp(int value) @safe pure nothrow const
     {
         return opCmp(Rational(value));
-    }
-
-    T opCast(T)() @safe pure nothrow const 
-            if (isNumeric!T)
-    {
-        return num / cast(T) den;
     }
 
     string toString() @safe pure nothrow const
